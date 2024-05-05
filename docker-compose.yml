@@ -1,21 +1,21 @@
 services:
   # NginxProxyManager
   nginxproxymanager:
-  image: "jc21/nginx-proxy-manager:latest"
-  container_name: nginx-proxy
-  restart: unless-stopped
-  ports:
-    - "80:80" # Public HTTP Port
-    - "443:443" # Public HTTPS Port
-    - "81:81" # Admin Web Port
-  environment:
-    DB_SQLITE_FILE: "/data/database.sqlite"
-    DISABLE_IPV6: "true"
-  volumes:
-    - ./proxy/data:/data
-    - ./proxy/letsencrypt:/etc/letsencrypt
-  networks:
-    - proxy
+    image: "jc21/nginx-proxy-manager:latest"
+    container_name: nginx-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80" # Public HTTP Port
+      - "443:443" # Public HTTPS Port
+      - "81:81" # Admin Web Port
+    environment:
+      DB_SQLITE_FILE: "/data/database.sqlite"
+      DISABLE_IPV6: "true"
+    volumes:
+      - ./proxy/data:/data
+      - ./proxy/letsencrypt:/etc/letsencrypt
+    networks:
+      - proxy
 
   #---------------------------------------------------------------#
   # Authentik Database
@@ -133,7 +133,7 @@ services:
     image: jodogne/orthanc-plugins
     container_name: orthanc
     ports:
-      # - 8042:8042
+      # - 8042:8042 #only expose locally if need to access orthanc
       - 4242:4242 #dicom Port
     volumes:
       - ./orthanc/config:/etc/orthanc/:ro

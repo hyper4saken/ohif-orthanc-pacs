@@ -2,7 +2,10 @@ window.config = {
   routerBasename: "/",
   extensions: [],
   modes: [],
-  customizationService: {},
+  customizationService: {
+    dicomUploadComponent:
+      "@ohif/extension-cornerstone.customizationModule.cornerstoneDicomUploadComponent",
+  },
   showStudyList: true,
   maxNumberOfWebWorkers: 3,
   showWarningMessageForCrossOrigin: true,

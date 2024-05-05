@@ -8,6 +8,38 @@ _Ohif v3_: (OHIF) Viewer is an open source, web-based, medical imaging platform.
 
 _Orthanc_: Its free and open-source, lightweight DICOM server for medical imaging.
 
+### File Structure
+
+```bash
+├── authentik
+│   ├── certs
+│   ├── custom-templates
+│   ├── database
+│   ├── media
+│   │   └── public
+│   │       ├── favicon.svg
+│   │       ├── flow-backgrounds
+│   │       │   └── star-wars-poster-4k-af-1920x1080.jpg
+│   │       └── logo.png
+│   └── redis
+├── docker-compose.yml
+├── ohif
+│   ├── config
+│   │   ├── logo.png
+│   │   └── ohif.js
+│   └── nginx
+│       ├── default-ohif-nginx.conf
+│       └── ohif-nginx.conf
+├── orthanc
+│   ├── config
+│   │   ├── orthanc.json
+│   │   └── postgresql.json
+│   ├── database
+│   └── dicomImages
+├── proxy
+└── README.md
+```
+
 ### Create new docker network _pacs_
 
 ```bash

@@ -4,6 +4,7 @@
 
 # OHIF v3 with Orthanc(PostgresDB) with Authentik for Auth and Nginx Proxy Manager for Proxy
 
+## Intro:
 > **🩻 Ohif v3:** (OHIF) Viewer is an open source, web-based, medical imaging platform.
 
 > **📀 Orthanc:** Its free and open-source, lightweight DICOM server for medical imaging.
@@ -13,6 +14,10 @@
 > **🔐 Authentik:** It is an open-source authentication and authorization server that provides secure access control and identity management for web applications.
 
 > **🌐 Nginx Proxy Manager:** It is a simple yet powerful web-based tool for managing Nginx proxy servers, enabling easy configuration and management of reverse proxies and SSL/TLS termination.
+
+---
+## 🤔 Want to know how it looks like. Here is the Demo Video
+[![DEMO VIDEO](https://img.youtube.com/vi/2Sde7z1E_y8/0.jpg)](https://www.youtube.com/watch?v=Y2Sde7z1E_y8)
 
 ### Create new docker network `proxy`
 

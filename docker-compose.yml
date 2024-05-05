@@ -1,0 +1,161 @@
+services:
+  # NginxProxyManager
+  nginxproxymanager:
+  image: "jc21/nginx-proxy-manager:latest"
+  container_name: nginx-proxy
+  restart: unless-stopped
+  ports:
+    - "80:80" # Public HTTP Port
+    - "443:443" # Public HTTPS Port
+    - "81:81" # Admin Web Port
+  environment:
+    DB_SQLITE_FILE: "/data/database.sqlite"
+    DISABLE_IPV6: "true"
+  volumes:
+    - ./proxy/data:/data
+    - ./proxy/letsencrypt:/etc/letsencrypt
+  networks:
+    - proxy
+
+  #---------------------------------------------------------------#
+  # Authentik Database
+  postgresql:
+    image: docker.io/library/postgres:12-alpine
+    container_name: authdb
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 5s
+    volumes:
+      - ./authentik/database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${PG_PASS:?database password required}
+      POSTGRES_USER: ${PG_USER:-authentik}
+      POSTGRES_DB: ${PG_DB:-authentik}
+    env_file:
+      - .env
+    networks:
+      - proxy
+
+  #---------------------------------------------------------------#
+  # Authentik cache
+  redis:
+    image: docker.io/library/redis:alpine
+    container_name: redis
+    command: --save 60 1 --loglevel warning
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+    volumes:
+      - ./authentik/redis:/data
+    networks:
+      - proxy
+
+  #---------------------------------------------------------------#
+  # Authentik Server
+  server:
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.4.1}
+    restart: unless-stopped
+    container_name: authserver
+    command: server
+    environment:
+      AUTHENTIK_REDIS__HOST: redis
+      AUTHENTIK_POSTGRESQL__HOST: authdb
+      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
+    volumes:
+      - ./authentik/media:/media
+      - ./authentik/custom-templates:/templates
+    env_file:
+      - .env
+    # ports:
+    #   - "${COMPOSE_PORT_HTTP:-9800}:9000"
+    #   - "${COMPOSE_PORT_HTTPS:-9443}:9443"
+    networks:
+      - proxy
+    depends_on:
+      - postgresql
+      - redis
+
+  #---------------------------------------------------------------#
+  # Authentik Worker
+  worker:
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2024.2.3}
+    container_name: authworker
+    restart: unless-stopped
+    command: worker
+    environment:
+      AUTHENTIK_REDIS__HOST: redis
+      AUTHENTIK_POSTGRESQL__HOST: authdb
+      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
+    user: root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./authentik/media:/media
+      - ./authentik/certs:/certs
+      - ./authentik/custom-templates:/templates
+    env_file:
+      - .env
+    networks:
+      - proxy
+    depends_on:
+      - postgresql
+      - redis
+
+  #---------------------------------------------------------------#
+  # Orthanc Database
+  database:
+    image: postgres:alpine
+    container_name: pacsdb
+    volumes:
+      - ./orthanc/database:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=CnCuL2nS4yiUDm427L
+      - POSTGRES_USER=orthanc
+      - POSTGRES_DB=orthanc
+    restart: always
+    networks:
+      - proxy
+
+  #---------------------------------------------------------------#
+  # Orthanc Pacs
+  pacs:
+    image: jodogne/orthanc-plugins
+    container_name: orthanc
+    ports:
+      # - 8042:8042
+      - 4242:4242 #dicom Port
+    volumes:
+      - ./orthanc/config:/etc/orthanc/:ro
+      - ./orthanc/dicomImages:/var/lib/orthanc/db/
+    restart: always
+    networks:
+      - proxy
+  #---------------------------------------------------------------#
+  #Ohif Viewer
+  ohif:
+    image: ohif/app
+    container_name: ohif
+    # ports:
+    #   - 3001:80
+    volumes:
+      - ./ohif/config/ohif.js:/usr/share/nginx/html/app-config.js:ro
+      - ./ohif/config/logo.png:/usr/share/nginx/html/logo.png:ro
+      - ./ohif/nginx/ohif-nginx.conf:/etc/nginx/enabled-sites/ohif.conf
+      - ./ohif/nginx/default-ohif-nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true

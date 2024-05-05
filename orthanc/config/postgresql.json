@@ -1,0 +1,12 @@
+{
+  "PostgreSQL": {
+    "EnableIndex": true,
+    "EnableStorage": false,
+    "Host": "pacsdb",
+    "Port": 5432,
+    "Database": "orthanc",
+    "Username": "orthanc",
+    "Password": "CnCuL2nS4yiUDm427L",
+    "Lock": false
+  }
+}

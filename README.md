@@ -8,6 +8,12 @@ _Ohif v3_: (OHIF) Viewer is an open source, web-based, medical imaging platform.
 
 _Orthanc_: Its free and open-source, lightweight DICOM server for medical imaging.
 
+_PostgreSQL:_ It is a powerful open-source relational database management system known for its reliability, extensibility, and advanced features.
+
+_Authentik:_ It is an open-source authentication and authorization server that provides secure access control and identity management for web applications.
+
+_Nginx Proxy Manager:_ It is a simple yet powerful web-based tool for managing Nginx proxy servers, enabling easy configuration and management of reverse proxies and SSL/TLS termination.
+
 ### File Structure
 
 ```bash

@@ -1,3 +1,7 @@
+# M A P D R (Hyper4Saken)
+
+![MAPDR](https://github.com/hyper4saken/ohif-orthanc-pacs/blob/main/ohif/config/logo.png)
+
 # OHIF v3 with Orthanc(PostgresDB) with Authentik for Auth and Nginx Proxy Manager for Proxy
 
 _Ohif v3_: (OHIF) Viewer is an open source, web-based, medical imaging platform.

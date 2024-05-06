@@ -90,6 +90,12 @@ aHlwZXI6bWFwZHI=
 ```
 
 ### Update Nginx config for Ohif to pass http auth for accessing Orthanc
+Edit Nginx reverse proxy
+```bash
+nvim ./ohif/nginx/ohif.conf
+```
+and paste base64-encoded user name and password
+
 ```conf
 proxy_set_header Authorization "Basic aHlwZXI6bWFwZHI=";  # Replace with base64-encoded credentials
 ```

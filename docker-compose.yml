@@ -130,10 +130,10 @@ services:
   #---------------------------------------------------------------#
   # Orthanc Pacs
   pacs:
-    image: jodogne/orthanc-plugins
+    image: orthancteam/orthanc-plugins
     container_name: orthanc
     ports:
-      # - 8042:8042 #only expose locally if need to access orthanc
+      - 8042:8042 #only expose locally if need to access orthanc
       - 4242:4242 #dicom Port
     volumes:
       - ./orthanc/config:/etc/orthanc/:ro

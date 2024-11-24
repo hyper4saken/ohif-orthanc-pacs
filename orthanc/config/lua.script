@@ -1,0 +1,15 @@
+function IncomingHttpRequestFilter(method, uri, ip, username, httpHeaders)
+  if method == 'GET' and string.find(uri, '/ohif') and username == 'PULBIC' then
+    return true
+  end
+ if method == 'GET' and string.find(uri, '/instances') and username == 'PULBIC' then
+    return true
+  end
+
+if username == 'ADMIN' then
+    return true
+  end
+
+  return false
+end
+

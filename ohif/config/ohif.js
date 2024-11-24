@@ -63,9 +63,9 @@ window.config = {
           target: "_self",
           rel: "noopener noreferrer",
           className: "header-brand",
-          href: "/",
+          href: "https://radathand.com/casebank/",
         },
-        React.createElement("img", {
+          React.createElement("img", {
           src: "./logo.png",
           style: {
             display: "block",
@@ -75,6 +75,13 @@ window.config = {
           },
         }),
       );
+    },
+        createStyleComponentFn: function (React) {
+      return React.createElement('style', {}, `
+        flex {
+          display: none!important;
+        }
+      `);
     },
   },
   hotkeys: [

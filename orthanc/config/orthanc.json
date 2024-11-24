@@ -1,11 +1,11 @@
 {
-  "Name": "M A P D R",
+  "Name": "Radiology Casebank",
   "StorageDirectory": "/var/lib/orthanc/db",
   "StorageCompression": true,
   "MaximumStorageSize": 0,
   "MaximumPatientCount": 0,
   "MaximumStorageCacheSize": 128,
-  "LuaScripts": [],
+  "LuaScripts": ["/etc/orthanc/lua.script"],
   "Plugins": ["/usr/share/orthanc/plugins", "/usr/local/share/orthanc/plugins"],
   "ConcurrentJobs": 2,
   "HttpServerEnabled": true,
@@ -22,6 +22,15 @@
   "DicomPort": 4242,
   "DefaultEncoding": "Latin1",
   "AcceptedTransferSyntaxes": ["1.2.840.10008.1.*"],
+   "DeflatedTransferSyntaxAccepted"     : true,
+     "JpegTransferSyntaxAccepted"         : true,
+     "Jpeg2000TransferSyntaxAccepted"     : true,
+     "JpegLosslessTransferSyntaxAccepted" : true,
+     "JpipTransferSyntaxAccepted"         : true,
+     "Mpeg2TransferSyntaxAccepted"        : true,
+     "RleTransferSyntaxAccepted"          : true,
+     "Mpeg4TransferSyntaxAccepted"        : true,
+     "H265TransferSyntaxAccepted"         : true, 
   "UnknownSopClassAccepted": false,
   "DicomScpTimeout": 30,
   "RemoteAccessAllowed": true,
@@ -34,6 +43,7 @@
   "RegisteredUsers": {
     "mapdr": "mapdr"
   },
+  
   "DicomTlsEnabled": false,
   "DicomTlsRemoteCertificateRequired": true,
   "DicomAlwaysAllowEcho": true,
